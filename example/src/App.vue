@@ -26,7 +26,7 @@
 </template>
 <script>
   import formulaObj from './formula'
-  import { calculate, formulaWatcher, FormulaEditor } from 'vue-formula-editor'
+  import { calculate, formulaWatcher, FormulaEditor } from './f/index'
 
   export default {
     name: 'HomeView',
