@@ -23,6 +23,9 @@ importers:
       element-ui:
         specifier: ^2.15.14
         version: 2.15.14(vue@2.7.16)
+      vue-cli-service:
+        specifier: ^5.0.10
+        version: 5.0.10
       vue-codemirror:
         specifier: ^4.0.6
         version: 4.0.6
@@ -59,7 +62,7 @@ importers:
         version: 6.8.0
       eslint-config-standard:
         specifier: ^14.1.1
-        version: 14.1.1(eslint-plugin-import@2.30.0)(eslint-plugin-node@11.1.0)(eslint-plugin-promise@4.3.1)(eslint-plugin-standard@4.1.0)(eslint@6.8.0)
+        version: 14.1.1(eslint-plugin-import@2.30.0(eslint@6.8.0))(eslint-plugin-node@11.1.0(eslint@6.8.0))(eslint-plugin-promise@4.3.1)(eslint-plugin-standard@4.1.0(eslint@6.8.0))(eslint@6.8.0)
       eslint-plugin-html:
         specifier: ^6.0.0
         version: 6.2.0
@@ -107,7 +110,7 @@ importers:
         version: 7.0.2(rollup@2.79.1)
       rollup-plugin-vue:
         specifier: ^5.1.9
-        version: 5.1.9(postcss@8.4.45)(vue-template-compiler@2.7.16)
+        version: 5.1.9(lodash@4.17.21)(postcss@8.4.45)(pug@3.0.3)(vue-template-compiler@2.7.16)
       style-loader:
         specifier: ^4.0.0
         version: 4.0.0(webpack@5.94.0)
@@ -3226,6 +3229,10 @@ packages:
     resolution: {integrity: sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==}
     engines: {node: '>=0.10.0'}
 
+  vue-cli-service@5.0.10:
+    resolution: {integrity: sha512-j4+wxqjaHsgphWsQsDs0ET1TWSu+dW5syxk5MloTp6BsQ9dpN+SB0nq253thS6konMC+YiQLHxbf73ytrTHoRA==}
+    hasBin: true
+
   vue-codemirror@4.0.6:
     resolution: {integrity: sha512-ilU7Uf0mqBNSSV3KT7FNEeRIxH4s1fmpG4TfHlzvXn0QiQAbkXS9lLfwuZpaBVEnpP5CSE62iGJjoliTuA8poQ==}
     engines: {node: '>= 4.0.0', npm: '>= 3.0.0'}
@@ -4147,11 +4154,13 @@ snapshots:
       glob: 10.4.5
       is-reference: 1.2.1
       magic-string: 0.30.11
+    optionalDependencies:
       rollup: 2.79.1
 
   '@rollup/plugin-json@6.1.0(rollup@2.79.1)':
     dependencies:
       '@rollup/pluginutils': 5.1.0(rollup@2.79.1)
+    optionalDependencies:
       rollup: 2.79.1
 
   '@rollup/plugin-node-resolve@15.2.3(rollup@2.79.1)':
@@ -4162,6 +4171,7 @@ snapshots:
       is-builtin-module: 3.2.1
       is-module: 1.0.0
       resolve: 1.22.8
+    optionalDependencies:
       rollup: 2.79.1
 
   '@rollup/pluginutils@5.1.0(rollup@2.79.1)':
@@ -4169,6 +4179,7 @@ snapshots:
       '@types/estree': 1.0.5
       estree-walker: 2.0.2
       picomatch: 2.3.1
+    optionalDependencies:
       rollup: 2.79.1
 
   '@rtsao/scc@1.1.0': {}
@@ -4216,6 +4227,7 @@ snapshots:
       '@vue/babel-sugar-inject-h': 1.4.0(@babel/core@7.25.2)
       '@vue/babel-sugar-v-model': 1.4.0(@babel/core@7.25.2)
       '@vue/babel-sugar-v-on': 1.4.0(@babel/core@7.25.2)
+    optionalDependencies:
       vue: 2.7.16
     transitivePeerDependencies:
       - supports-color
@@ -4269,9 +4281,9 @@ snapshots:
     optionalDependencies:
       prettier: 2.8.8
 
-  '@vue/component-compiler-utils@3.3.0(pug@3.0.3)':
+  '@vue/component-compiler-utils@3.3.0(lodash@4.17.21)(pug@3.0.3)':
     dependencies:
-      consolidate: 0.15.1(pug@3.0.3)
+      consolidate: 0.15.1(lodash@4.17.21)(pug@3.0.3)
       hash-sum: 1.0.2
       lru-cache: 4.1.5
       merge-source-map: 1.1.0
@@ -4336,9 +4348,9 @@ snapshots:
       - walrus
       - whiskers
 
-  '@vue/component-compiler@4.2.4(postcss@8.4.45)(vue-template-compiler@2.7.16)':
+  '@vue/component-compiler@4.2.4(lodash@4.17.21)(postcss@8.4.45)(vue-template-compiler@2.7.16)':
     dependencies:
-      '@vue/component-compiler-utils': 3.3.0(pug@3.0.3)
+      '@vue/component-compiler-utils': 3.3.0(lodash@4.17.21)(pug@3.0.3)
       clean-css: 4.2.4
       hash-sum: 1.0.2
       postcss: 8.4.45
@@ -4590,9 +4602,11 @@ snapshots:
       is-array-buffer: 3.0.4
       is-shared-array-buffer: 1.0.3
 
-  asap@2.0.6: {}
+  asap@2.0.6:
+    optional: true
 
-  assert-never@1.3.0: {}
+  assert-never@1.3.0:
+    optional: true
 
   astral-regex@1.0.0: {}
 
@@ -4666,6 +4680,7 @@ snapshots:
   babel-walk@3.0.0-canary-5:
     dependencies:
       '@babel/types': 7.25.6
+    optional: true
 
   balanced-match@1.0.2: {}
 
@@ -4753,6 +4768,7 @@ snapshots:
   character-parser@2.2.0:
     dependencies:
       is-regex: 1.1.4
+    optional: true
 
   chardet@0.7.0: {}
 
@@ -4809,15 +4825,18 @@ snapshots:
     dependencies:
       source-map: 0.6.1
 
-  consolidate@0.15.1(pug@3.0.3):
+  consolidate@0.15.1(lodash@4.17.21)(pug@3.0.3):
     dependencies:
       bluebird: 3.7.2
+    optionalDependencies:
+      lodash: 4.17.21
       pug: 3.0.3
 
   constantinople@4.0.1:
     dependencies:
       '@babel/parser': 7.25.6
       '@babel/types': 7.25.6
+    optional: true
 
   convert-source-map@2.0.0: {}
 
@@ -4860,6 +4879,7 @@ snapshots:
       postcss-modules-values: 4.0.0(postcss@8.4.45)
       postcss-value-parser: 4.2.0
       semver: 7.6.3
+    optionalDependencies:
       webpack: 5.94.0
 
   css-parse@2.0.0:
@@ -5011,7 +5031,8 @@ snapshots:
     dependencies:
       esutils: 2.0.3
 
-  doctypes@1.1.0: {}
+  doctypes@1.1.0:
+    optional: true
 
   dom-serializer@1.4.1:
     dependencies:
@@ -5148,7 +5169,7 @@ snapshots:
 
   escape-string-regexp@1.0.5: {}
 
-  eslint-config-standard@14.1.1(eslint-plugin-import@2.30.0)(eslint-plugin-node@11.1.0)(eslint-plugin-promise@4.3.1)(eslint-plugin-standard@4.1.0)(eslint@6.8.0):
+  eslint-config-standard@14.1.1(eslint-plugin-import@2.30.0(eslint@6.8.0))(eslint-plugin-node@11.1.0(eslint@6.8.0))(eslint-plugin-promise@4.3.1)(eslint-plugin-standard@4.1.0(eslint@6.8.0))(eslint@6.8.0):
     dependencies:
       eslint: 6.8.0
       eslint-plugin-import: 2.30.0(eslint@6.8.0)
@@ -5167,6 +5188,7 @@ snapshots:
   eslint-module-utils@2.11.0(eslint-import-resolver-node@0.3.9)(eslint@6.8.0):
     dependencies:
       debug: 3.2.7
+    optionalDependencies:
       eslint: 6.8.0
       eslint-import-resolver-node: 0.3.9
     transitivePeerDependencies:
@@ -5594,6 +5616,7 @@ snapshots:
     dependencies:
       acorn: 7.4.1
       object-assign: 4.1.1
+    optional: true
 
   is-extglob@2.1.1: {}
 
@@ -5616,7 +5639,8 @@ snapshots:
   is-number@7.0.0:
     optional: true
 
-  is-promise@2.2.2: {}
+  is-promise@2.2.2:
+    optional: true
 
   is-reference@1.2.1:
     dependencies:
@@ -5674,7 +5698,8 @@ snapshots:
 
   js-base64@2.6.4: {}
 
-  js-stringify@1.0.2: {}
+  js-stringify@1.0.2:
+    optional: true
 
   js-tokens@4.0.0: {}
 
@@ -5707,6 +5732,7 @@ snapshots:
     dependencies:
       is-promise: 2.2.2
       promise: 7.3.1
+    optional: true
 
   less@3.13.1:
     dependencies:
@@ -5983,8 +6009,9 @@ snapshots:
   postcss-load-config@3.1.4(postcss@8.4.45):
     dependencies:
       lilconfig: 2.1.0
-      postcss: 8.4.45
       yaml: 1.10.2
+    optionalDependencies:
+      postcss: 8.4.45
 
   postcss-merge-longhand@5.1.7(postcss@8.4.45):
     dependencies:
@@ -6195,6 +6222,7 @@ snapshots:
   promise@7.3.1:
     dependencies:
       asap: 2.0.6
+    optional: true
 
   prr@1.0.1:
     optional: true
@@ -6206,6 +6234,7 @@ snapshots:
       constantinople: 4.0.1
       js-stringify: 1.0.2
       pug-runtime: 3.0.1
+    optional: true
 
   pug-code-gen@3.0.3:
     dependencies:
@@ -6217,8 +6246,10 @@ snapshots:
       pug-runtime: 3.0.1
       void-elements: 3.1.0
       with: 7.0.2
+    optional: true
 
-  pug-error@2.1.0: {}
+  pug-error@2.1.0:
+    optional: true
 
   pug-filters@4.0.0:
     dependencies:
@@ -6227,35 +6258,43 @@ snapshots:
       pug-error: 2.1.0
       pug-walk: 2.0.0
       resolve: 1.22.8
+    optional: true
 
   pug-lexer@5.0.1:
     dependencies:
       character-parser: 2.2.0
       is-expression: 4.0.0
       pug-error: 2.1.0
+    optional: true
 
   pug-linker@4.0.0:
     dependencies:
       pug-error: 2.1.0
       pug-walk: 2.0.0
+    optional: true
 
   pug-load@3.0.0:
     dependencies:
       object-assign: 4.1.1
       pug-walk: 2.0.0
+    optional: true
 
   pug-parser@6.0.0:
     dependencies:
       pug-error: 2.1.0
       token-stream: 1.0.0
+    optional: true
 
-  pug-runtime@3.0.1: {}
+  pug-runtime@3.0.1:
+    optional: true
 
   pug-strip-comments@2.0.0:
     dependencies:
       pug-error: 2.1.0
+    optional: true
 
-  pug-walk@2.0.0: {}
+  pug-walk@2.0.0:
+    optional: true
 
   pug@3.0.3:
     dependencies:
@@ -6267,6 +6306,7 @@ snapshots:
       pug-parser: 6.0.0
       pug-runtime: 3.0.1
       pug-strip-comments: 2.0.0
+    optional: true
 
   punycode@2.3.1: {}
 
@@ -6413,10 +6453,10 @@ snapshots:
       serialize-javascript: 4.0.0
       terser: 5.31.6
 
-  rollup-plugin-vue@5.1.9(postcss@8.4.45)(vue-template-compiler@2.7.16):
+  rollup-plugin-vue@5.1.9(lodash@4.17.21)(postcss@8.4.45)(pug@3.0.3)(vue-template-compiler@2.7.16):
     dependencies:
-      '@vue/component-compiler': 4.2.4(postcss@8.4.45)(vue-template-compiler@2.7.16)
-      '@vue/component-compiler-utils': 3.3.0(pug@3.0.3)
+      '@vue/component-compiler': 4.2.4(lodash@4.17.21)(postcss@8.4.45)(vue-template-compiler@2.7.16)
+      '@vue/component-compiler-utils': 3.3.0(lodash@4.17.21)(pug@3.0.3)
       debug: 4.3.7
       hash-sum: 1.0.2
       magic-string: 0.25.9
@@ -6780,7 +6820,8 @@ snapshots:
       is-number: 7.0.0
     optional: true
 
-  token-stream@1.0.0: {}
+  token-stream@1.0.0:
+    optional: true
 
   tsconfig-paths@3.15.0:
     dependencies:
@@ -6868,7 +6909,10 @@ snapshots:
 
   v8-compile-cache@2.4.0: {}
 
-  void-elements@3.1.0: {}
+  void-elements@3.1.0:
+    optional: true
+
+  vue-cli-service@5.0.10: {}
 
   vue-codemirror@4.0.6:
     dependencies:
@@ -6969,6 +7013,7 @@ snapshots:
       '@babel/types': 7.25.6
       assert-never: 1.3.0
       babel-walk: 3.0.0-canary-5
+    optional: true
 
   word-wrap@1.2.5: {}
 

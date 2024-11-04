@@ -8,7 +8,7 @@
   "module": "dist/bundle.esm.js",
   "scripts": {
     "build": "rollup -c",
-    "dev":" cd example && npm run dev",
+    "dev": " cd example && pnpm run dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "files": [
@@ -61,6 +61,7 @@
     "@vue/babel-preset-jsx": "^1.4.0",
     "codemirror": "^5.65.17",
     "element-ui": "^2.15.14",
+    "vue-cli-service": "^5.0.10",
     "vue-codemirror": "^4.0.6"
   }
 }

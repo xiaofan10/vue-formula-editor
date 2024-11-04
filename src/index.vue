@@ -14,8 +14,7 @@
         :nodes="nodes"
         class="formula-list"
         @formulaClick="onFormulaClick"
-        @enterInfo="onEnterInfo"
-        />
+        @enterInfo="onEnterInfo" />
       <div v-if="currentFormula" class="formula-info">
         <div class="info-text">{{ currentFormula.tip }}</div>
         <div class="info-text">用法：{{ currentFormula.usage }}</div>
@@ -133,9 +132,9 @@
           'field'
         )
       },
-      onEnterInfo(fumulaInfo){
+      onEnterInfo(fumulaInfo) {
         this.currentFormula = fumulaInfo
-      }
+      },
     },
     created() {},
     mounted() {},
