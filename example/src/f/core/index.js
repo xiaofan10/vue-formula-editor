@@ -31,6 +31,9 @@ export default class FormulaEditorCore {
         attributes: {
           'data-menuId': o.menuId,
           'data-enCode': o.enCode,
+          'data-enType': o.enType,
+          'data-enText': o.enText,
+          'data-enFormula': o.enFormula,
         },
         atomic: true,
       })
@@ -73,6 +76,18 @@ export default class FormulaEditorCore {
   }
 
   getData() {
+    // console.log({
+    //   text: this.text,
+    //   marks: this.marks,
+    // })
+    // console.log(
+    //   JSON.stringify(
+    //     JSON.stringify({
+    //       text: this.text,
+    //       marks: this.marks,
+    //     })
+    //   )
+    // )
     return {
       text: this.text,
       marks: this.marks,
@@ -94,6 +109,8 @@ export default class FormulaEditorCore {
         const { attributes } = marks
         return {
           ...marks.find(),
+          enType: attributes['data-enType'],
+          enFormula: attributes['data-enFormula'],
           enText: attributes['data-enText'],
           enCode: attributes['data-enCode'],
           menuId: attributes['data-menuId'],
@@ -155,8 +172,8 @@ export default class FormulaEditorCore {
     }
 
     try {
-      JSON.parse(str)
-      return true // 解析成功，字符串是有效的 JSON
+      const p = JSON.parse(str)
+      return typeof p === 'object' // 解析成功，字符串是有效的 JSON
     } catch (e) {
       return false // 解析失败，字符串不是有效的 JSON
     }
@@ -164,15 +181,8 @@ export default class FormulaEditorCore {
 
   onBeforeChange(cm, changeObj) {
     const { text, from, cancel } = changeObj
-    console.log(text)
-    // debugger
     const isJson = this.isValidJSON(text[0])
-    // if (isJson) {
-    //   const objText = JSON.parse(text[0])
-    // }
     // const data = this.matchField(text[0])
-    // console.log(changeObj, '-------------------------', data, text)
-    // debugger
 
     if (isJson) {
       cancel()
@@ -186,6 +196,8 @@ export default class FormulaEditorCore {
           'data-menuId': field.menuId,
           'data-enCode': field.enCode,
           'data-enText': field.fullName,
+          'data-enFormula': field.formula,
+          'data-enType': field.type,
         },
         atomic: true,
       })

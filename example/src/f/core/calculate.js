@@ -27,7 +27,6 @@ function formatData(params) {
     let ruleText = text
     let ruleOffset = 0
     marks.sort((a, b) => a.from.ch - b.from.ch)
-    const nMarks = []
     for (const mark of marks) {
       const { enCode, from, to, uuid, enText } = mark
 
@@ -107,9 +106,16 @@ function calculate(params) {
     let offset = 0 // 偏移量
     marks.sort((a, b) => a.from.ch - b.from.ch)
     for (const mark of marks) {
-      const { enCode, from, to, uuid } = mark
-
+      const { enCode, from, to, uuid, enType, enFormula } = mark
       let data = value[enCode] || value[uuid]
+      if (enType === 'formula') {
+        const formula = JSON.parse(enFormula)
+        data = calculate({
+          text: formula.text,
+          marks: formula.marks,
+          value: value,
+        })
+      }
       if (type !== 'validate') {
         data = Number(data)
       }
