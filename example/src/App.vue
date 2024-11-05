@@ -2,11 +2,11 @@
   <div id="app">
     <el-button type="text" @click="dialogVisible = true">配置公式</el-button>
     <el-form ref="form" :model="formData">
-      <el-form-item label="名称">
-        <el-input v-model="formData.name"></el-input>
+      <el-form-item label="大豆单价">
+        <el-input v-model="formData.price"></el-input>
       </el-form-item>
-      <el-form-item label="描述">
-        <el-input type="textarea" v-model="formData.desc"></el-input>
+      <el-form-item label="大豆总量">
+        <el-input v-model="formData.total"></el-input>
       </el-form-item>
     </el-form>
     <div>计算结果：{{ result }}</div>
@@ -37,8 +37,8 @@
       return {
         dialogVisible: false,
         formData: {
-          name: '',
-          desc: '',
+          price: 0,
+          total: 0,
         },
         result: '',
         list: [],
@@ -46,14 +46,24 @@
         watchData: null,
         fieldList: [
           {
-            fullName: '名称',
+            fullName: '大豆利润',
             value: 'string',
-            enCode: 'name',
+            enCode: 'profit',
+            type: 'rule',
+            formula:
+              '{"text":"SUM(大豆总量,大豆总量)","marks":[{"from":{"line":0,"ch":4,"sticky":null},"to":{"line":0,"ch":8,"sticky":null},"enCode":"total"},{"from":{"line":0,"ch":9,"sticky":null},"to":{"line":0,"ch":13,"sticky":null},"enCode":"total"}]}', // 公式
           },
           {
-            fullName: '描述',
+            fullName: '大豆单价',
             value: 'string',
-            enCode: 'desc',
+            enCode: 'price',
+            type: 'atom',
+          },
+          {
+            fullName: '大豆总量',
+            value: 'string',
+            enCode: 'total',
+            type: 'atom',
           },
         ],
       }

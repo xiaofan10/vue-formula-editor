@@ -44,6 +44,9 @@ export default class FormulaEditorCore {
       return acc
     }, {})
     const result = calculate({ ...this.getData(), value: variable })
+    if (!result) {
+      return { error: false }
+    }
     const calculateResult = result.toString().includes('Error: #VALUE!')
     if (calculateResult) {
       return { error: true, message: '公式计算错误，请检查公式' }
@@ -91,6 +94,7 @@ export default class FormulaEditorCore {
         const { attributes } = marks
         return {
           ...marks.find(),
+          enText: attributes['data-enText'],
           enCode: attributes['data-enCode'],
           menuId: attributes['data-menuId'],
         }
@@ -145,13 +149,34 @@ export default class FormulaEditorCore {
     }
   }
 
+  isValidJSON(str) {
+    if (typeof str !== 'string') {
+      return false // 只处理字符串
+    }
+
+    try {
+      JSON.parse(str)
+      return true // 解析成功，字符串是有效的 JSON
+    } catch (e) {
+      return false // 解析失败，字符串不是有效的 JSON
+    }
+  }
+
   onBeforeChange(cm, changeObj) {
     const { text, from, cancel } = changeObj
-    const data = this.matchField(text[0])
-    console.log('----', data, changeObj)
-    if (data.length) {
+    console.log(text)
+    // debugger
+    const isJson = this.isValidJSON(text[0])
+    // if (isJson) {
+    //   const objText = JSON.parse(text[0])
+    // }
+    // const data = this.matchField(text[0])
+    // console.log(changeObj, '-------------------------', data, text)
+    // debugger
+
+    if (isJson) {
       cancel()
-      const field = JSON.parse(data[0])
+      const field = JSON.parse(text[0])
       const fieldFrom = { ...from }
       const to = { ...from, ch: from.ch + field.fullName.length }
       cm.replaceRange(field.fullName, fieldFrom)
@@ -160,6 +185,7 @@ export default class FormulaEditorCore {
         attributes: {
           'data-menuId': field.menuId,
           'data-enCode': field.enCode,
+          'data-enText': field.fullName,
         },
         atomic: true,
       })

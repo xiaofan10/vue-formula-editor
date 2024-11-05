@@ -84,6 +84,7 @@
     },
     computed: {
       nodes() {
+        console.log(JSON.parse(JSON.stringify(this.formulaList)))
         return this.formulaList || []
       },
     },

@@ -1,31 +1,30 @@
 <template>
   <div class="formula-list">
     <el-input
-    placeholder='搜索函数'
-    prefix-icon="el-icon-search"
-    v-model="searchTreeVariable" 
-    clearable
-    ></el-input>
-    <div class="treeContainer" @mouseleave="leaveTree" >
+      placeholder="搜索函数"
+      prefix-icon="el-icon-search"
+      v-model="searchTreeVariable"
+      clearable></el-input>
+    <div class="treeContainer" @mouseleave="leaveTree">
       <Tree
-      :data="filterData"
-      :default-expanded-keys="['frequentlyUse']"
-      :props="props"
-      :current-node-key="currentKeyNode.enCode"
-      node-key="enCode"
-      @node-click="nodeClick"
-      highlight-current
-            
-      >
-      <span class="info-container" @mouseenter="enterInfo(data)"  slot-scope="{ data }">
-        <span>{{ data.name }}</span>
-        <span v-if="data.tip" class="tip">
-          {{ data.tip }}
+        :data="filterData"
+        :default-expanded-keys="['frequentlyUse']"
+        :props="props"
+        :current-node-key="currentKeyNode.enCode"
+        node-key="enCode"
+        @node-click="nodeClick"
+        highlight-current>
+        <span
+          class="info-container"
+          @mouseenter="enterInfo(data)"
+          slot-scope="{ data }">
+          <span>{{ data.name }}</span>
+          <span v-if="data.tip" class="tip">
+            {{ data.tip }}
+          </span>
         </span>
-      </span>
-    </Tree>
+      </Tree>
     </div>
-
   </div>
 </template>
 
@@ -51,14 +50,14 @@
     },
     data() {
       return {
-        searchTreeVariable:"",
+        searchTreeVariable: '',
         // 选中的节点
-        currentKeyNode:{},
+        currentKeyNode: {},
       }
     },
     computed: {
       filterData() {
-        if(!this.searchTreeVariable){
+        if (!this.searchTreeVariable) {
           return this.nodes
         }
         return this.filterTreeData(this.nodes)
@@ -69,9 +68,9 @@
       nodeClick(o) {
         const currentKeyNode = this.currentKeyNode
         // 目录情况
-        if (o.formula){
-          if(currentKeyNode && currentKeyNode.enCode ){
-            this.currentKeyNode={}
+        if (o.formula) {
+          if (currentKeyNode && currentKeyNode.enCode) {
+            this.currentKeyNode = {}
           }
           return
         }
@@ -80,25 +79,25 @@
       },
       filterTreeData(nodes) {
         // 找到nodes树中包含searchTreeVariable的节点但只有一层的结果
-        return nodes.reduce((pre,cur)=>{
-          if(cur.name.toLowerCase().includes(this.searchTreeVariable)){
-            pre.push({...cur})
+        return nodes.reduce((pre, cur) => {
+          if (cur.name.toLowerCase().includes(this.searchTreeVariable)) {
+            pre.push({ ...cur })
           }
-          if(cur.formula){
+          if (cur.formula) {
             pre.push(...this.filterTreeData(cur.formula))
           }
           return pre
-        },[])
+        }, [])
       },
       enterInfo(data) {
-        if(data.formula) return 
+        if (data.formula) return
         this.$emit('enterInfo', data)
       },
-      leaveTree(){
-        if(this.currentKeyNode && this.currentKeyNode.enCode){
+      leaveTree() {
+        if (this.currentKeyNode && this.currentKeyNode.enCode) {
           this.$emit('enterInfo', this.currentKeyNode)
         }
-      }
+      },
     },
     created() {},
     mounted() {},

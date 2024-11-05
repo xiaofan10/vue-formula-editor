@@ -1,5 +1,4 @@
 import * as FormulaFunc from '@formulajs/formulajs'
-
 class FunctionCore {
   constructor() {
     Object.assign(FunctionCore.prototype, FormulaFunc)
