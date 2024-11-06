@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <el-button type="text" @click="dialogVisible = true">配置公式</el-button>
+    <el-button type="text" @click="handleShow">配置公式</el-button>
     <el-form ref="form" :model="formData">
       <el-form-item v-for="item in fieldList" :label="item.fullName">
         <el-input
@@ -27,6 +27,14 @@
   import formulaObj from './formula'
   import { calculate, formulaWatcher, FormulaEditor } from './f/index'
   const fieldList = [
+    {
+      fullName: '总利润',
+      value: 'string',
+      enCode: 'tprofit',
+      type: 'formula',
+      formula:
+        '{"text":"玉米利润+大豆利润","marks":[{"from":{"line":0,"ch":0,"sticky":null},"to":{"line":0,"ch":4,"sticky":null},"enType":"formula","enFormula":"{\\"text\\":\\"玉米总量*(玉米售价-玉米进价)\\",\\"marks\\":[{\\"from\\":{\\"line\\":0,\\"ch\\":0,\\"sticky\\":null},\\"to\\":{\\"line\\":0,\\"ch\\":4,\\"sticky\\":null},\\"enType\\":\\"atom\\",\\"enText\\":\\"玉米总量\\",\\"enCode\\":\\"ytotal\\"},{\\"from\\":{\\"line\\":0,\\"ch\\":6,\\"sticky\\":null},\\"to\\":{\\"line\\":0,\\"ch\\":10,\\"sticky\\":null},\\"enType\\":\\"atom\\",\\"enText\\":\\"玉米售价\\",\\"enCode\\":\\"youtprice\\"},{\\"from\\":{\\"line\\":0,\\"ch\\":11,\\"sticky\\":null},\\"to\\":{\\"line\\":0,\\"ch\\":15,\\"sticky\\":null},\\"enType\\":\\"atom\\",\\"enText\\":\\"玉米进价\\",\\"enCode\\":\\"yinprice\\"}]}","enText":"玉米利润","enCode":"yprofit"},{"from":{"line":0,"ch":5,"sticky":null},"to":{"line":0,"ch":9,"sticky":null},"enType":"formula","enFormula":"{\\"text\\":\\"大豆总量*(大豆售价-大豆进价)\\",\\"marks\\":[{\\"from\\":{\\"line\\":0,\\"ch\\":0,\\"sticky\\":null},\\"to\\":{\\"line\\":0,\\"ch\\":4,\\"sticky\\":null},\\"enType\\":\\"atom\\",\\"enText\\":\\"大豆总量\\",\\"enCode\\":\\"total\\"},{\\"from\\":{\\"line\\":0,\\"ch\\":6,\\"sticky\\":null},\\"to\\":{\\"line\\":0,\\"ch\\":10,\\"sticky\\":null},\\"enType\\":\\"atom\\",\\"enText\\":\\"大豆售价\\",\\"enCode\\":\\"outprice\\"},{\\"from\\":{\\"line\\":0,\\"ch\\":11,\\"sticky\\":null},\\"to\\":{\\"line\\":0,\\"ch\\":15,\\"sticky\\":null},\\"enType\\":\\"atom\\",\\"enText\\":\\"大豆进价\\",\\"enCode\\":\\"inprice\\"}]}","enText":"大豆利润","enCode":"profit"}]}',
+    },
     {
       fullName: '玉米利润',
       value: 'string',
@@ -117,6 +125,15 @@
       })
     },
     methods: {
+      handleShow() {
+        this.dialogVisible = true
+        const _self = this
+        setTimeout(() => {
+          _self.$refs.formulaEditor
+            .getEditor()
+            .renderData(JSON.parse(fieldList[0].formula))
+        }, 0)
+      },
       onConfirm() {
         // const data = this.$refs.formulaEditor.getData()
         // this.formulaConf = data
@@ -133,14 +150,12 @@
         // )
       },
       handleChange() {
-        console.log(111111)
         const formulaConf = this.$refs.formulaEditor.getData()
         this.result = calculate({
           value: this.formData,
           marks: formulaConf.marks,
           text: formulaConf.text,
         })
-        console.log(this.result)
       },
       onCancel() {
         this.dialogVisible = false

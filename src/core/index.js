@@ -70,6 +70,10 @@ export default class FormulaEditorCore {
   }
 
   getData() {
+    console.log({
+      text: this.text,
+      marks: this.marks,
+    })
     return {
       text: this.text,
       marks: this.marks,

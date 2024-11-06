@@ -8,7 +8,7 @@
   "module": "dist/bundle.esm.js",
   "scripts": {
     "build": "rollup -c",
-    "dev": " cd example && pnpm run dev",
+    "dev": " cd example && npm run dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "files": [

@@ -18,8 +18,8 @@ function replaceString({ curStr, repStr, offset, from, to }) {
 }
 
 function formatData(params) {
-  const { text, marks = [], value = {}, type } = params
-
+  const { text, marks = [] } = params
+  // text SUM(玉米总量,IF(玉米售价>0,玉米总量,大豆总量))+玉米总量
   if (!text) return new Error('非法公式')
   try {
     let calcText = text
@@ -30,10 +30,7 @@ function formatData(params) {
     for (const mark of marks) {
       const { enCode, from, to, uuid, enText } = mark
 
-      let data = value[enCode] || value[uuid]
-      if (type !== 'validate') {
-        data = Number(data)
-      }
+      const data = Number(value[enCode] || value[uuid])
       // 子表情况, 待开发
       // if (enCode.indexOf('.') > -1) {
       //   const [key, subKey] = enCode.split('.')

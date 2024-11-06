@@ -79,6 +79,7 @@
           lineNumbers: false, // 是否显示行号
           styleActiveLine: true, // 高亮选中行
           showCursorWhenSelecting: true, // 当选择处于活动状态时是否应绘制游标
+          lineWrapping: true,
         },
       }
     },
@@ -102,6 +103,9 @@
       },
     },
     methods: {
+      getEditor() {
+        return this.editorCore
+      },
       reset() {
         this.currentFormula = null
         this.editorCore.reset()
@@ -109,17 +113,7 @@
       getData() {
         return this.editorCore.getData()
       },
-      onmmReady(codemirror) {
-        window.xx = codemirror
-        // codemirror.doc.markText(fieldFrom, to, {
-        //   className: 'cm-field',
-        //   attributes: {
-        //     'data-menuId': 'name',
-        //     'data-enCode': 'age',
-        //   },
-        //   atomic: true,
-        // })
-      },
+
       onCmReady(codemirror) {
         this.editorCore = new FormulaEditorCore(
           codemirror,

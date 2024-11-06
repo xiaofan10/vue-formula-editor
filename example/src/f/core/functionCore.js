@@ -6,7 +6,6 @@ class FunctionCore {
 
   executeFunction(str) {
     // 执行函数
-    // console.log(str)
     const fn = new Function(
       'with(this) { return ' + str + '; }' // 使用 `with` 来确保从当前实例中查找函数
     ).bind(this)

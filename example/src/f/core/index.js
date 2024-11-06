@@ -76,10 +76,10 @@ export default class FormulaEditorCore {
   }
 
   getData() {
-    // console.log({
-    //   text: this.text,
-    //   marks: this.marks,
-    // })
+    console.log({
+      text: this.text,
+      marks: this.marks,
+    })
     // console.log(
     //   JSON.stringify(
     //     JSON.stringify({
@@ -180,27 +180,36 @@ export default class FormulaEditorCore {
   }
 
   onBeforeChange(cm, changeObj) {
-    const { text, from, cancel } = changeObj
+    const { text, from, cancel, origin } = changeObj
     const isJson = this.isValidJSON(text[0])
-    // const data = this.matchField(text[0])
-
-    if (isJson) {
+    console.log(changeObj)
+    if (origin === 'paste') {
       cancel()
-      const field = JSON.parse(text[0])
-      const fieldFrom = { ...from }
-      const to = { ...from, ch: from.ch + field.fullName.length }
-      cm.replaceRange(field.fullName, fieldFrom)
-      cm.doc.markText(fieldFrom, to, {
-        className: 'cm-field',
-        attributes: {
-          'data-menuId': field.menuId,
-          'data-enCode': field.enCode,
-          'data-enText': field.fullName,
-          'data-enFormula': field.formula,
-          'data-enType': field.type,
-        },
-        atomic: true,
-      })
+    }
+    if (!text.join('').replace(/[\s]+/g, '') && origin === '+input') {
+      cancel()
+    }
+    if (text) {
+      // const data = this.matchField(text[0])
+
+      if (isJson) {
+        cancel()
+        const field = JSON.parse(text[0])
+        const fieldFrom = { ...from }
+        const to = { ...from, ch: from.ch + field.fullName.length }
+        cm.replaceRange(field.fullName, fieldFrom)
+        cm.doc.markText(fieldFrom, to, {
+          className: 'cm-field',
+          attributes: {
+            'data-menuId': field.menuId,
+            'data-enCode': field.enCode,
+            'data-enText': field.fullName,
+            'data-enFormula': field.formula,
+            'data-enType': field.type,
+          },
+          atomic: true,
+        })
+      }
     }
   }
 

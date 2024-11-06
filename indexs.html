@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function parseFormula(formula) {
+        const tokens = []
+        let currentToken = ''
+        let bracketCount = 0
+        let i = 0
+
+        while (i < formula.length) {
+          const char = formula[i]
+
+          if (char === '(') {
+            // 如果当前token是函数名，开始一个新的函数
+            if (currentToken) {
+              tokens.push(currentToken)
+              currentToken = ''
+            }
+            bracketCount++
+            currentToken += char
+          } else if (char === ')') {
+            currentToken += char
+            bracketCount--
+            if (bracketCount === 0) {
+              // 完成一个函数的解析
+              tokens.push(currentToken)
+              currentToken = ''
+            }
+          } else if (char === ',') {
+            // 处理参数分隔符
+            if (bracketCount === 0) {
+              if (currentToken) {
+                tokens.push(currentToken.trim())
+                currentToken = ''
+              }
+            } else {
+              currentToken += char
+            }
+          } else if (char === '+' || char === '-') {
+            // 处理运算符
+            if (currentToken) {
+              tokens.push(currentToken.trim())
+              currentToken = ''
+            }
+            tokens.push(char)
+          } else {
+            currentToken += char
+          }
+
+          i++
+        }
+
+        if (currentToken) {
+          tokens.push(currentToken.trim())
+        }
+
+        return buildNestedStructure(tokens)
+      }
+
+      function buildNestedStructure(tokens) {
+        const result = []
+        const stack = []
+
+        for (const token of tokens) {
+          if (token === '+' || token === '-') {
+            result.push(token) // 将运算符直接推入结果
+          } else if (token.startsWith('SUM(') || token.startsWith('IF(')) {
+            const funcName = token.slice(0, token.indexOf('('))
+            const argsString = token.slice(token.indexOf('(') + 1, -1)
+            const args = parseArgs(argsString)
+            result.push({ formula: funcName, args })
+          } else {
+            result.push(token) // 处理普通参数
+          }
+        }
+
+        return result
+      }
+
+      function parseArgs(argsString) {
+        const args = []
+        let currentArg = ''
+        let bracketCount = 0
+        let i = 0
+
+        while (i < argsString.length) {
+          const char = argsString[i]
+
+          if (char === '(') {
+            bracketCount++
+            currentArg += char
+          } else if (char === ')') {
+            bracketCount--
+            currentArg += char
+          } else if (char === ',' && bracketCount === 0) {
+            args.push(currentArg.trim())
+            currentArg = ''
+          } else {
+            currentArg += char
+          }
+
+          i++
+        }
+
+        if (currentArg) {
+          args.push(currentArg.trim())
+        }
+
+        return args.map(arg =>
+          arg.startsWith('SUM') || arg.startsWith('IF')
+            ? parseFormula(arg)
+            : arg
+        )
+      }
+
+      // 示例
+      const formulaString =
+        'SUM(玉米总量,IF(玉米售价>0,玉米总量,大豆总量))+玉米总量'
+      const parsedResult = parseFormula(formulaString)
+      console.log(JSON.stringify(parsedResult, null, 2))
+    </script>
+  </body>
+</html>
