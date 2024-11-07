@@ -25,7 +25,38 @@
 </template>
 <script>
   import formulaObj from './formula'
-  import { calculate, formulaWatcher, FormulaEditor } from './f/index'
+
+  import {
+    calculate,
+    formulaWatcher,
+    FormulaEditor,
+    decompile,
+  } from './f/index'
+  import * as luainjs from 'lua-in-js'
+  const lua = luainjs.createEnv()
+  const luaScript = `
+     function SUM(...)
+          local sum = 0
+          for _, value in ipairs({...}) do
+              sum = sum + value
+          end
+          return sum
+      end
+
+      function IF(condition, trueValue, falseValue)
+          if condition then
+              return trueValue
+          else
+              return falseValue
+          end
+      end
+
+      return SUM(5, IF(4>10,5,1))
+      `
+  const result = lua.parse(luaScript)
+  console.log(result)
+  console.log(result.exec()) // 输出: 12
+
   const fieldList = [
     {
       fullName: '总利润',
@@ -40,16 +71,14 @@
       value: 'string',
       enCode: 'yprofit',
       type: 'formula',
-      formula:
-        '{"text":"玉米总量*(玉米售价-玉米进价)","marks":[{"from":{"line":0,"ch":0,"sticky":null},"to":{"line":0,"ch":4,"sticky":null},"enType":"atom","enText":"玉米总量","enCode":"ytotal"},{"from":{"line":0,"ch":6,"sticky":null},"to":{"line":0,"ch":10,"sticky":null},"enType":"atom","enText":"玉米售价","enCode":"youtprice"},{"from":{"line":0,"ch":11,"sticky":null},"to":{"line":0,"ch":15,"sticky":null},"enType":"atom","enText":"玉米进价","enCode":"yinprice"}]}',
+      formula: '${ytotal}*(${youtprice}-${yinprice})',
     },
     {
       fullName: '大豆利润',
       value: 'string',
       enCode: 'profit',
       type: 'formula',
-      formula:
-        '{"text":"大豆总量*(大豆售价-大豆进价)","marks":[{"from":{"line":0,"ch":0,"sticky":null},"to":{"line":0,"ch":4,"sticky":null},"enType":"atom","enText":"大豆总量","enCode":"total"},{"from":{"line":0,"ch":6,"sticky":null},"to":{"line":0,"ch":10,"sticky":null},"enType":"atom","enText":"大豆售价","enCode":"outprice"},{"from":{"line":0,"ch":11,"sticky":null},"to":{"line":0,"ch":15,"sticky":null},"enType":"atom","enText":"大豆进价","enCode":"inprice"}]}',
+      formula: '${total}*(${outprice}-${inprice})',
     },
     {
       fullName: '大豆进价',
@@ -118,20 +147,16 @@
     },
     mounted() {
       this.list = formulaObj.map(ObjInstance => new ObjInstance())
-
-      // 计算值 - 传入配置
-      this.result = calculate({
-        text: 'SUM(1,2,3,4,5,6,7,8,9,10)',
-      })
     },
     methods: {
       handleShow() {
         this.dialogVisible = true
         const _self = this
         setTimeout(() => {
-          _self.$refs.formulaEditor
-            .getEditor()
-            .renderData(JSON.parse(fieldList[0].formula))
+          const formulaEditor = _self.$refs.formulaEditor.getEditor()
+          const rule = decompile('${yprofit}+${profit}')
+
+          _self.$refs.formulaEditor.getEditor().renderData(rule)
         }, 0)
       },
       onConfirm() {

@@ -20,6 +20,7 @@ function replaceString({ curStr, repStr, offset, from, to }) {
 function formatData(params) {
   const { text, marks = [] } = params
   // text SUM(玉米总量,IF(玉米售价>0,玉米总量,大豆总量))+玉米总量
+
   if (!text) return new Error('非法公式')
   try {
     let calcText = text
@@ -89,6 +90,125 @@ function formatData(params) {
   }
 }
 
+function compile(params) {
+  const { text, marks } = params
+  marks.sort((a, b) => a.from.ch - b.from.ch)
+  try {
+    let str = text
+    let offset = 0
+    marks.forEach((mark, index) => {
+      const { from, to, enCode, enType, enText, enFormula } = mark
+      // 替换字符串的指定部分
+      const startIndex = from.ch + offset
+      const endIndex = to.ch + offset
+      const prefixStr = str.slice(0, startIndex)
+      const suffixStr = str.slice(endIndex)
+      const repStr = '${' + enCode + '}'
+      str = `${prefixStr}${repStr}${suffixStr}`
+      offset = offset + repStr.length - (to.ch - from.ch)
+    })
+
+    return str
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+function decompile(params) {
+  const regex = /\$\{([^}]+)\}/g
+
+  const mapAllList = {
+    yprofit: {
+      enText: '玉米利润',
+      value: 'string',
+      enCode: 'yprofit',
+      enType: 'formula',
+      enFormula: '${ytotal}*(${youtprice}-${yinprice})',
+    },
+    profit: {
+      enText: '大豆利润',
+      value: 'string',
+      enCode: 'profit',
+      enType: 'formula',
+      enFormula: '${total}*(${outprice}-${inprice})',
+    },
+    inprice: {
+      enText: '大豆进价',
+      value: 'string',
+      enCode: 'inprice',
+      enType: 'atom',
+    },
+    outprice: {
+      enText: '大豆售价',
+      value: 'string',
+      enCode: 'outprice',
+      enType: 'atom',
+    },
+    total: {
+      enText: '大豆总量',
+      value: 'string',
+      enCode: 'total',
+      enType: 'atom',
+    },
+    yinprice: {
+      enText: '玉米进价',
+      value: 'string',
+      enCode: 'yinprice',
+      enType: 'atom',
+    },
+    youtprice: {
+      enText: '玉米售价',
+      value: 'string',
+      enCode: 'youtprice',
+      enType: 'atom',
+    },
+    ytotal: {
+      enText: '玉米总量',
+      value: 'string',
+      enCode: 'ytotal',
+      enType: 'atom',
+    },
+  }
+  let offset = 0
+  let str = params
+  const matches = [...params.matchAll(regex)].map(item => {
+    const origin = mapAllList[item[1]]
+    const { enText, enType, enFormula } = origin
+    const f = item.index
+    const t = f + item[0].length
+    const startIndex = offset + f
+    const endIndex = startIndex + t
+
+    // 替换字符串的指定部分
+    const prefixStr = str.slice(0, startIndex)
+    const suffixStr = str.slice(endIndex)
+    const repStr = enText
+    str = `${prefixStr}${repStr}${suffixStr}`
+    offset += repStr.length - (t - f)
+
+    return {
+      enCode: item[1],
+      enText,
+      enType,
+      enFormula,
+      from: {
+        line: 0,
+        ch: startIndex,
+      },
+      to: {
+        line: 0,
+        ch: startIndex + repStr.length,
+      },
+    }
+  })
+
+  console.log(matches, str)
+  return {
+    marks: matches,
+    text: str,
+  }
+}
+
 /**
  * 计算公式
  * @param {{text: string, marks: Array, value: Object}} params
@@ -106,7 +226,7 @@ function calculate(params) {
       const { enCode, from, to, uuid, enType, enFormula } = mark
       let data = value[enCode] || value[uuid]
       if (enType === 'formula') {
-        const formula = JSON.parse(enFormula)
+        const formula = decompile(enFormula)
         data = calculate({
           text: formula.text,
           marks: formula.marks,
@@ -185,4 +305,4 @@ function formulaWatcher(vm, formData, formulaConf, fn) {
   toCalculate()
   return () => watchList.forEach(watchItem => watchItem())
 }
-export { calculate, formulaWatcher }
+export { calculate, formulaWatcher, decompile }

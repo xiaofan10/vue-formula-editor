@@ -76,10 +76,11 @@ export default class FormulaEditorCore {
   }
 
   getData() {
-    console.log({
+    console.log('编辑器公式', {
       text: this.text,
       marks: this.marks,
     })
+
     // console.log(
     //   JSON.stringify(
     //     JSON.stringify({

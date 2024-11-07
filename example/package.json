@@ -9,6 +9,7 @@
   "dependencies": {
     "core-js": "^3.8.3",
     "element-ui": "^2.15.14",
+    "lua-in-js": "^2.2.5",
     "vue": "^2.6.14",
     "vue-formula-editor": "^0.2.3",
     "vue-router": "^3.5.1"
